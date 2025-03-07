@@ -17,3 +17,9 @@ fetch all employees from above employees table whose names contain the letter "a
 SELECT * 
 FROM employees
 WHERE LEN(name) - LEN(REPLACE(LOWER(name), 'a', ''))=2
+
+retrieve only duplicate records from employees table
+select name,department,salary, count(*) as duplicate 
+from employees
+group by name,department,salary
+having count(*)>1
