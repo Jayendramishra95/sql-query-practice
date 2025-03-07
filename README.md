@@ -12,3 +12,8 @@ FROM
     SalaryRanks
 WHERE
     rank = 2
+
+fetch all employees from above employees table whose names contain the letter "a"  exactly twice in mssql.
+SELECT * 
+FROM employees
+WHERE LEN(name) - LEN(REPLACE(LOWER(name), 'a', ''))=2
