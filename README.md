@@ -26,3 +26,13 @@ sol- select name,department,salary, count(*) as duplicate
 from employees
 group by name,department,salary
 having count(*)>1
+
+4- write a query to calculate the running total of sales by date.
+
+select * from sales
+SELECT 
+    sale_date,
+    amount,
+    SUM(amount) OVER (ORDER BY sale_date) AS running_total
+FROM sales
+ORDER BY sale_date
