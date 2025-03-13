@@ -136,6 +136,59 @@ WITH CTE AS (
 DELETE FROM duplicates_q6 
 WHERE id IN (SELECT id FROM CTE WHERE row_num > 1);
 
-7- 
+7- Create a query to calculate the ratio of sales between two categories.
+
+WITH CategoryTotals AS (
+    SELECT 
+        category, 
+        SUM(sales_amount) AS total_sales
+    FROM category_sales_q7
+    GROUP BY category
+)
+SELECT 
+    (SELECT total_sales FROM CategoryTotals WHERE category = 'Electronics') * 1.0 / 
+    (SELECT total_sales FROM CategoryTotals WHERE category = 'Clothing') AS sales_ratio
+FROM CategoryTotals
+WHERE category = 'Electronics'
+
+8- How would you implement a recursive query to generate a hierarchical structure?
+
+WITH EmployeeHierarchy AS (
+    
+    SELECT 
+        employee_id, 
+        employee_name, 
+        manager_id, 
+        1 AS hierarchy_level
+    FROM employees_hierarchy_q8
+    WHERE manager_id IS NULL
+    
+    UNION ALL
+    
+    
+    SELECT 
+        e.employee_id, 
+        e.employee_name, 
+        e.manager_id, 
+        eh.hierarchy_level + 1 AS hierarchy_level
+    FROM employees_hierarchy_q8 e
+    INNER JOIN EmployeeHierarchy eh 
+        ON e.manager_id = eh.employee_id
+)
+SELECT * FROM EmployeeHierarchy
+ORDER BY hierarchy_level, manager_id, employee_id
+
+9- Write a query to find gaps in sequential numbering within a table.
+
+Select id+1 as gap from (select id, lead(id) over(order by id asc) as next_num
+from sequence_q9) A
+where next_num - id > 1
+
+10- Split a comma-separated string into individual rows using SQL.
+
+SELECT id, TRIM(value) AS item
+FROM csv_data_q10
+CROSS APPLY STRING_SPLIT(csv_string, ',')
+
 
 
